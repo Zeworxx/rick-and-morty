@@ -52,24 +52,22 @@ export class AppComponent implements OnInit {
   }
 
   fetchDetails(id: string): void {
-    // Not implemented
-    // this.apollo
-    //   .watchQuery({
-    //     query: gql`
-    //     query {
-    //       character {
-    //         results(id : $id) {
-    //           gender
-    //         }
-    //       }
-    //     }
-    //   `, variables: {
-    //       id: id
-    //     }
-    //   })
-    //   .valueChanges.subscribe((result: any) => {
-    //     this.characterDetail = result.data?.characters.results;
-    //   });
+    this.isActive = true
+    this.apollo
+      .watchQuery({
+        query: gql`
+        query GetCharactersById($id: ID!){
+          character(id : $id) {
+            gender
+          }
+        }
+      `, variables: {
+          id: id
+        }
+      })
+      .valueChanges.subscribe((result: any) => {
+        this.characterDetail = result.data?.character;
+      });
   }
 }
 
