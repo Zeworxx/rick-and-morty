@@ -7,9 +7,10 @@ import { Apollo, gql } from 'apollo-angular';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'rick-and-morty';
   characters: any[] = [];
-  currentPage = 1
+  characterDetail: any
+  private currentPage = 1
+  isActive = false
   constructor(private apollo: Apollo) { }
 
   ngOnInit(): void {
@@ -20,30 +21,55 @@ export class AppComponent implements OnInit {
     this.apollo
       .watchQuery({
         query: gql`
-        query {
-          characters(page: ${pagination}) {
+        query GetCharacters($pagination: Int!) {
+          characters(page: $pagination) {
             results {
+              id
               name
               image
             }
           }
         }
-      `,
+      `, variables: {
+          pagination: pagination
+        }
       })
       .valueChanges.subscribe((result: any) => {
         this.characters = result.data?.characters.results;
-        console.log(this.characters)
       });
   }
 
   public nextPage(): void {
-    this.listOfCharacters(this.currentPage++)
+    this.currentPage++
+    this.listOfCharacters(this.currentPage)
   }
 
   public previousPage(): void {
     if (this.currentPage > 1) {
-      this.listOfCharacters(this.currentPage--)
+      this.currentPage--
+      this.listOfCharacters(this.currentPage)
     }
+  }
+
+  fetchDetails(id: string): void {
+    // Not implemented
+    // this.apollo
+    //   .watchQuery({
+    //     query: gql`
+    //     query {
+    //       character {
+    //         results(id : $id) {
+    //           gender
+    //         }
+    //       }
+    //     }
+    //   `, variables: {
+    //       id: id
+    //     }
+    //   })
+    //   .valueChanges.subscribe((result: any) => {
+    //     this.characterDetail = result.data?.characters.results;
+    //   });
   }
 }
 

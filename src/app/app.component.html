@@ -11,6 +11,10 @@
       </div>
       <div class="right">
         <h2> {{ character.name }}</h2>
+        <button (click)="fetchDetails(character.id)">Details</button>
+        <div class="character-details" *ngIf="isActive">
+          {{ characterDetail.gender }}
+        </div>
       </div>
     </div>
   </div>
